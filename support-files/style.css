@@ -14,8 +14,9 @@ body {
 }
 
 header {
-    margin-left: 150px;
+    #margin-left: 150px;
     padding-left: 5px;
+    background-color: whitesmoke;
 }
 
 header h1 {
@@ -25,8 +26,57 @@ header h1 {
 div.container {
     padding: 10px;
     margin: auto;
-    background-color: whitesmoke;
+    #background-color: whitesmoke;
+    background-color: white;
     max-width: 900px;
+}
+
+#plots {
+    max-width: 900px;
+}
+
+div.plot-page {
+    text-align: center;
+}
+
+div.plot-page table {
+    margin: 10px auto;
+    #border: 1px solid black;
+    width: 100%;
+    max-width: 700px;
+    text-align: center;
+}
+
+.plot-page table h1 {
+    margin: 0px;
+}
+
+input.move-day {
+    width: 70%;
+    height: 100px;
+    font-size: 100%;
+    clear: both;
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+.plot-page td {
+    #border: 1px solid black;
+    vertical-align: top;
+    text-align: center;
+}
+
+.plot-page img {
+    width: 100%;
+    float: left;
+}
+
+#rose {
+    width: 50%;
+}
+
+#sat {
+    width: 100%;
 }
 
 nav {
@@ -65,6 +115,12 @@ div.main {
     min-width: 500px;
     margin-left: 150px;
     padding-left: 5px;
+}
+
+div.form {
+    margin: auto;
+    padding: auto;
+    text-align: center;
 }
 
 .clearfix {

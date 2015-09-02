@@ -9,7 +9,7 @@
             
             <header><h1>ENA Data Browser</h1></header>
             
-            <?php require($DOCUMENT_ROOT . "support-files/navbar.html"); ?>
+            <?php require($DOCUMENT_ROOT . "support-files/navbar.php"); ?>
             <div class="main">
                 <p>
                     Welcome to the data browser for the Atmospheric Radiation Measurement's 
@@ -29,11 +29,23 @@
                 </p>
 
                 <p>
-                    I will provide more information about the use of this site as I build out the 
-                    functionality of the site. Right now, I don't quite know how it's going to work.
+                    To begin, input a date into the field below and hit submit. At the moment, the plots
+                    are static .png files which link to their full-sized versions. I am working on making
+                    some more interactive plots for a future version.
                 </p>
+            
+                <div class="form">
+                    <form action="ena-figures.php" method="GET" name="ena-figures">
+                        <!-- <input type="date" name="date" value="<?php echo date('Y-m-d'); ?>"> -->
+                        <input type="date" name="date" value="2013-10-04">
+                        <input type="submit" value="Submit">
+                    </form>
 
+                </div>
+            
             </div>
+        
         </div>
+    
     </body>
 </html>
