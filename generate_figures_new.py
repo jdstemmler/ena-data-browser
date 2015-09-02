@@ -41,7 +41,7 @@ def panel_plot():
 					  vmin=0,
 					  vmax=np.nanpercentile(UHSAS.size_distribution, 99),
 					  cmap=cm.gist_earth)
-		ax.set_title(iter_date.strftime('%A %B %d %Y'))
+		#ax.set_title(iter_date.strftime('%A %B %d %Y'))
 		ax.set_ylim(bottom=UHSAS.lower_size_limit[0])
 		ax.set_yticks([UHSAS.lower_size_limit[0]] +
 					   ax.get_yticks()[1:].tolist())
@@ -91,7 +91,7 @@ def panel_plot():
 		n=3
 		l=0
 		ax = plt.subplot2grid((n, 1), (l,0))
-		ax.set_title(iter_date.strftime('%A %B %d %Y'))
+		#ax.set_title(iter_date.strftime('%A %B %d %Y'))
 
 	ax.plot(DATA.index, DATA.CCN01, '.', color='navy', label="0.1% SS")
 	ax.plot(DATA.index, DATA.CCN05, '.', color='seagreen', label="0.8% SS")
@@ -154,6 +154,7 @@ def panel_plot():
 	l+=1
 
 	# ax.set_xlabel(iter_date.strftime('%A %B %d %Y'))
+	fig.suptitle(iter_date.strftime('%A %B %d %Y'), fontsize=16, y=.99)
 
 	figout = os.path.join(plot_directory, 'main/')
 	if not os.path.isdir(figout):
@@ -233,7 +234,7 @@ support_directory = os.path.join(os.getenv("HOME"),
 					'Documents/htdocs/ena_data_browser/support-files')
 
 # set the start date
-start_date = datetime.date(2013, 10, 4)
+start_date = datetime.date(2015, 3, 1)
 today = datetime.datetime.now().date()
 
 # Surface Meteorology
