@@ -80,6 +80,7 @@ def panel_plot():
 					  " (cm$^{-3}$)", fontsize=yfs)
 		bx.get_yaxis().set_label_coords(1.08, 0.5)
 		bx.set_yticks(ax.get_yticks())
+		bx.set_ylim(ax.get_ylim())
 		ll = bx.legend(loc='lower right', bbox_to_anchor=[1, 1],
 					   numpoints=2, fontsize=8, ncol=2)
 
@@ -234,7 +235,7 @@ support_directory = os.path.join(os.getenv("HOME"),
 					'Documents/htdocs/ena_data_browser/support-files')
 
 # set the start date
-start_date = datetime.date(2015, 3, 1)
+start_date = datetime.date(2013, 10, 4)
 today = datetime.datetime.now().date()
 
 # Surface Meteorology
