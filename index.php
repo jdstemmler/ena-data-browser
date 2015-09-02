@@ -27,10 +27,23 @@
                     from the ARM Data Archive, which can be accessed through the "Order ENA Data" in
                     the navigation menu.
                 </p>
+                
+                <p>
+                    Products currently shown include:
+                    <ul>
+                        <li>UHSAS Aerosol Size Distributions and Aerosol Concentration</item>
+                        <li>CCN Number Concentration</li>
+                        <li>CN Number Concentration</li>
+                        <li>Mean Precip Rate</li>
+                        <li>Wind Speed and Direction</li>
+                        <li>Visual Satellite Image</li>
+                    </ul>
+                    The availability for each of the products is shown below the submit box.
+                </p>
 
                 <p>
                     To begin, input a date into the field below and hit submit. At the moment, the plots
-                    are static .png files which link to their full-sized versions. I am working on making
+                    are static png files which link to their full-sized versions. I am working on making
                     some more interactive plots for a future version.
                 </p>
             
@@ -42,6 +55,8 @@
                     </form>
 
                 </div>
+        
+                <a href="support-files/figures/data_availability.png"><img src="support-files/figures/data_availability.png" width=100%></a>
             
             </div>
         
