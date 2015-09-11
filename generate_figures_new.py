@@ -13,10 +13,13 @@ from mpl_toolkits.basemap import Basemap
 
 import toolbox as tbx
 import datetime
+from dateutil.parser import parse
 import numpy as np
 import pandas as pd
 import glob
 import os
+import sys
+import getopt
 
 from PIL import Image
 import urllib, cStringIO
@@ -235,7 +238,24 @@ support_directory = os.path.join(os.getenv("HOME"),
 					'Documents/htdocs/ena_data_browser/support-files')
 
 # set the start date
-start_date = datetime.date(2013, 10, 4)
+
+start_date = None
+try:
+	opts, args = getopt.getopt(sys.argv[1:], 'd:', ["date="])
+except getopt.GetoptError:
+	print("python generate_figures_new.py -d 2013-10-04")
+for opt, arg in opts:
+	print(opt, arg)
+	if opt in ('-d', '--date'):
+		try:
+			start_date = parse(arg).date()
+			print("Starting at {}".format(start_date.strftime("%Y-%m-%d")))
+		except:
+			print("Not a Valid Start Date. Using 2013-10-04")
+			start_date = datetime.datetime(2013, 10, 4).date()
+
+if start_date is None:
+	start_date = datetime.datetime(2013, 10, 4).date()
 today = datetime.datetime.now().date()
 
 # Surface Meteorology
@@ -327,7 +347,7 @@ while iter_date <= today:
 
 		panel_plot()
 		windrose_plot()
-		satellite_plot()
+		#satellite_plot()
 
 		plt.close('all')
 		#break
