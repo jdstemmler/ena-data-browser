@@ -57,10 +57,15 @@
                 </div>
         
                 <a href="support-files/figures/data_availability.png"><img src="support-files/figures/data_availability.png" width=100%></a>
-            
+                
+                <h2>Interesting Cases</h2>
+                
+                <p>
+                    A handful of interesting cases curated by us may be found by folloing the last link on the left.
+                    The requirements for being an "interesting case" are currently quite ill-defined, but include
+                    those types of cases which we find unusual, odd, or informative.
+                </p>
             </div>
-        
         </div>
-    
     </body>
 </html>

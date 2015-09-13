@@ -8,6 +8,6 @@
                 Order ENA Data
             </a>
         </li>
-
+        <li><a href="interesting_cases.php">Interesting Cases</a></li>
     </ul>
 </nav>

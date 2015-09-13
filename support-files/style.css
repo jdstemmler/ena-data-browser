@@ -79,6 +79,28 @@ input.move-day {
     width: 100%;
 }
 
+table.cases {
+    width: 70%
+}
+table.cases th.left {
+    text-align: left;
+    width: 20%;
+}
+
+table.cases th.right {
+    text-align: left;
+    width: 80%;
+}
+
+table.cases tr {
+    border: 1px solid black;
+}
+
+table.cases td {
+    text-align: left;
+    vertical-align: top;
+}
+
 nav {
     align-content: center;
     font-weight: 600;
