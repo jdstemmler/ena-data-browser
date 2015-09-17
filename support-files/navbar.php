@@ -9,5 +9,6 @@
             </a>
         </li>
         <li><a href="interesting_cases.php">Interesting Cases</a></li>
+        <li><a href="http://goo.gl/forms/ZQtUZ9cXP1">Submit Case</a></li>
     </ul>
 </nav>
