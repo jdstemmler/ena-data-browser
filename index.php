@@ -10,6 +10,7 @@
             <header><h1>ENA Data Browser</h1></header>
             
             <?php require($DOCUMENT_ROOT . "support-files/navbar.php"); ?>
+            
             <div class="main">
                 <p>
                     Welcome to the data browser for the Atmospheric Radiation Measurement's 
@@ -56,7 +57,9 @@
 
                 </div>
         
-                <a href="support-files/figures/data_availability.png"><img src="support-files/figures/data_availability.png" width=100%></a>
+                <a href="support-files/figures/data_availability.png">
+                    <img src="support-files/figures/data_availability.png" width=100%>
+                </a>
                 
                 <h2>Interesting Cases</h2>
                 
