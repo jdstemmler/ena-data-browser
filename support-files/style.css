@@ -80,16 +80,15 @@ input.move-day {
 }
 
 table.cases {
-    width: 70%
+    width: 80%;
 }
 table.cases th.left {
     text-align: left;
-    width: 20%;
+    min-width: 100px;
 }
 
 table.cases th.right {
     text-align: left;
-    width: 80%;
 }
 
 table.cases tr {
