@@ -2,4 +2,4 @@ RewriteEngine On
 RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 # Change "username" and "flasky" to your username and whatever directory name you made in public_html, respectively
-RewriteRule ^(.*)$ /~jstemm/ena_browser/run.fcgi/$1 [QSA,L]
+RewriteRule ^(.*)$ /~jstemm/ena_browser/run.cgi/$1 [QSA,L]
