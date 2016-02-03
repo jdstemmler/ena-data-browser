@@ -1,52 +1,63 @@
 {% extends 'navbar_fixed.html' %}
 
 {% block content %}
+<h1>ENA Data Browser</h1>
 
-        <h1>ENA Data Browser</h1>
+
+<p>Welcome to the data browser for the Atmospheric Radiation Measurement's
+Eastern North Atlantic permanent site. This site is created and maintained by
+Jayson Stemmler of the University of Washington (<a href=
+"mailto:jstemm@uw.edu">jstemm@uw.edu</a>). You should send him any questions or
+issues you have, not ARM.</p>
+
+
+<h2>How to use this site</h2>
+
+
+<p>This site provides quick and easy access to a number of data products from
+the permanent ARM site in the ENA. The data used in the visualizations were
+downloaded from the ARM Data Archive, which can be accessed through the "Order
+ENA Data" in the navigation menu.</p>
+
+
+<p>Products currently shown include:</p>
+
+
+<ul>
+    <li>UHSAS Aerosol Size Distributions and Aerosol Concentration</li>
+
+
+    <li>CCN Number Concentration</li>
+
+
+    <li>CN Number Concentration</li>
+
+
+    <li>Mean Precip Rate</li>
+
+
+    <li>Wind Speed and Direction</li>
+
+
+    <li>Visual Satellite Image</li>
+</ul>
+The availability for each of the products is shown below the submit box.
 
 <p>
-                    Welcome to the data browser for the Atmospheric Radiation Measurement's
-                    Eastern North Atlantic permanent site. This site is created and maintained
-                    by Jayson Stemmler of the University of Washington
-                    (<a href="mailto:jstemm@uw.edu">jstemm@uw.edu</a>). You should send him any
-                    questions or issues you have, not ARM.
-                </p>
+</p>
 
-                <h2>How to use this site</h2>
 
-                <p>
-                    This site provides quick and easy access to a number of data products from the
-                    permanent ARM site in the ENA. The data used in the visualizations were downloaded
-                    from the ARM Data Archive, which can be accessed through the "Order ENA Data" in
-                    the navigation menu.
-                </p>
+<p>To begin, input a date into the field below and hit submit. At the moment,
+the plots are static png files which link to their full-sized versions. I am
+working on making some more interactive plots for a future version.</p>
 
-                <p>
-                    Products currently shown include:
-                    <ul>
-                        <li>UHSAS Aerosol Size Distributions and Aerosol Concentration</item>
-                        <li>CCN Number Concentration</li>
-                        <li>CN Number Concentration</li>
-                        <li>Mean Precip Rate</li>
-                        <li>Wind Speed and Direction</li>
-                        <li>Visual Satellite Image</li>
-                    </ul>
-                    The availability for each of the products is shown below the submit box.
-                </p>
 
-                <p>
-                    To begin, input a date into the field below and hit submit. At the moment, the plots
-                    are static png files which link to their full-sized versions. I am working on making
-                    some more interactive plots for a future version.
-                </p>
-
-                <div class="form">
-                    <form action="ena-figures.php" method="GET" name="ena-figures">
-                        <!-- <input type="date" name="date" value="2016-02-02"> -->
-                        <input type="date" name="date" value="2013-10-04">
-                        <input type="submit" value="Submit">
-                    </form>
-
-                </div>
-
+<div class="form">
+    <form action="ena-figures.php" id="ena-figures" method="get" name=
+    "ena-figures">
+        <!-- <input type="date" name="date" value="2016-02-02"> -->
+        <input name="date" type="date" value="2013-10-04"> <input type="submit"
+        value="Submit">
+    </form>
+</div>
 {% endblock %}
