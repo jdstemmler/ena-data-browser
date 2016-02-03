@@ -1,3 +1,4 @@
+#!/usr/local/bin/python
 from wsgiref.handlers import CGIHandler
 from ena_app import app
 
