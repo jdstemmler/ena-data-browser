@@ -4,7 +4,7 @@ import datetime
 
 app = Flask(__name__)
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/ena', methods=['POST', 'GET'])
 def index():
     if request.method == "POST":
         result = request.form.get('date')
@@ -14,7 +14,7 @@ def index():
         return render_template('index.html')
     # return "<h1 style='color:blue'>Hello World!!</h1>"
 
-@app.route('/date/<date>')
+@app.route('/ena/date/<date>')
 def date_page(date):
 
     date_as_dt = parse(date)
