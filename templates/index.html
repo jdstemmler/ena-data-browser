@@ -1,5 +1,5 @@
-{% extends 'navbar_fixed.html' %}
-
+{% extends 'base.html' %}
+{% include 'navbar.html' %}
 {% block content %}
 <h1>ENA Data Browser</h1>
 
@@ -25,27 +25,16 @@ ENA Data" in the navigation menu.</p>
 
 <ul>
     <li>UHSAS Aerosol Size Distributions and Aerosol Concentration</li>
-
-
     <li>CCN Number Concentration</li>
-
-
     <li>CN Number Concentration</li>
-
-
     <li>Mean Precip Rate</li>
-
-
     <li>Wind Speed and Direction</li>
-
-
     <li>Visual Satellite Image</li>
 </ul>
 The availability for each of the products is shown below the submit box.
 
 <p>
 </p>
-
 
 <p>To begin, input a date into the field below and hit submit. At the moment,
 the plots are static png files which link to their full-sized versions. I am
@@ -60,4 +49,5 @@ working on making some more interactive plots for a future version.</p>
         value="Submit">
     </form>
 </div>
+
 {% endblock %}

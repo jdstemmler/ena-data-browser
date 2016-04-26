@@ -1,0 +1,43 @@
+{% block navbar %}
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button> <a class="navbar-brand" href="/">ENA Data Browser</a>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li class="dropdown">
+                    <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">Resources <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="http://www.arm.gov">ARM Homepage</a>
+                        </li>
+                        <li>
+                            <a href="https://www.arm.gov/sites/ena">ENA Project Homepage</a>
+                        </li>
+                        <li>
+                            <a href="http://www.archive.arm.gov/discovery/#v/results/s/fsite::ena">Order ENA Data</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">Cases <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="interesting_cases.php">Interesting Cases</a>
+                        </li>
+                        <li>
+                            <a href="http://goo.gl/forms/ZQtUZ9cXP1" target="_blank">Submit Case</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <meta content="IE=edge" http-equiv="X-UA-Compatible">
+      <meta content="width=device-width, initial-scale=1" name="viewport"><!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+      <meta content="" name="description">
+      <meta content="" name="author">
+      <link href="../static/favicon.ico" rel="icon">
+      <title>ENA Data Browser</title><!-- Bootstrap core CSS -->
+      <link href="../static/css/bootstrap.min.css" rel="stylesheet"><!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+      <link href="../static/custom/custom.css" rel="stylesheet">
+  </head>
+  <body>
+      <!-- Fixed navbar -->
+      {% block navbar %}
+      {% endblock %}
+
+      <div class="container">
+          {% block content %}
+          {% endblock %}
+      </div><!-- /container -->
+
+
+      <!-- Bootstrap core JavaScript
+      ================================================== -->
+      <!-- Placed at the end of the document so the pages load faster -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+      </script>
+      <script>
+      window.jQuery || document.write('<script src="../static/js/vendor/jquery.min.js"><\/script>')
+      </script>
+      <script src="../static/js/bootstrap.min.js">
+      </script> <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+
+      <!-- <script src="../static/js/ie10-viewport-bug-workaround.js">
+      </script> -->
+  </body>
+</html>
