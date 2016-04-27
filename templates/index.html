@@ -46,12 +46,21 @@
   working on making some more interactive plots for a future version.
 </p>
 
+<form class="form-horizontal text-center" action="{{ url_for('index') }}" id="ena-figures" method="post" name="ena-figures">
+  <div class="form-group">
+    <input name="date" type="date" value="2015-07-30">
+    <input type="submit" value="Submit">
+  </div>
+</form>
+
+<!--
 <div class="form">
   <form action="{{ url_for('index') }}" id="ena-figures" method="post" name="ena-figures">
-    <!-- <input type="date" name="date" value="2016-02-02"> -->
+    <! - - <input type="date" name="date" value="2016-02-02"> - ->
     <input name="date" type="date" value="2015-07-30">
     <input type="submit" value="Submit">
   </form>
 </div>
+-->
 
 {% endblock %}
