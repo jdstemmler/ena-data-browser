@@ -3,17 +3,17 @@
 {% include 'navbar.html' %}
 {% block content %}
 
-
+<!--
 <div class="row">
 <div class="col-md-12 text-center" style="font-size:36px">{{ date }}</div>
 </div>
-
+-->
 <div class="row">
   <div class="col-md-2">
     <a class="btn btn-primary btn-block" href={{ url_for('date_page', date=prev) }} role="button">{{ prev }}</a>
   </div>
 
-  <div class="col-md-8"></div>
+  <div class="col-md-8" style="font-size:30px">{{ date }}</div>
 
   <div class="col-md-2">
     <a class="btn btn-primary btn-block" href={{ url_for('date_page', date=next) }} role="button">{{ next }}</a>
