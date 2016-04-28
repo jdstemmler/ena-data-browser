@@ -3,7 +3,7 @@ body { padding-top: 70px; }
 table.cases {
     float: left;
     #border: 1px solid gray;
-    margin: 2px;
+    #margin: 2px;
     padding: 0px;
     #background-color: whitesmoke;
 }
@@ -29,6 +29,6 @@ table a {
 
 table a:hover {
     #color: darkblue;
-    background-color: lightgray;
+    #background-color: lightgray;
     text-decoration: none;
 }

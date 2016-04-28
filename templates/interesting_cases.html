@@ -10,11 +10,11 @@
   <tr><th>{{ category }}</th></tr>
 
   {% for date, description in frames['description'].iteritems() %}
-  <tr><td><a href="{{ url_for('date_page', date=date.strftime('%Y-%m-%d')) }}">
-    <strong>{{ date.strftime('%Y-%m-%d') }}</strong>
-    <br>
-    {{ description }}
-  </a></td></tr>
+    <tr><td><a href="{{ url_for('date_page', date=date.strftime('%Y-%m-%d')) }}">
+      <strong>{{ date.strftime('%Y-%m-%d') }}</strong>
+      <br>
+      {{ description }}
+    </a></td></tr>
   {% endfor %}
 
 </table>
