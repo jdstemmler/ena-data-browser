@@ -13,7 +13,6 @@ def index():
             return redirect(url_for('date_page', date=result))
     else:
         return render_template('index.html')
-    # return "<h1 style='color:blue'>Hello World!!</h1>"
 
 @app.route('/date/<date>')
 def date_page(date):
@@ -26,15 +25,11 @@ def date_page(date):
     next_date = (date_as_dt + datetime.timedelta(days=1)).strftime(dt_fmt)
     prev_date = (date_as_dt - datetime.timedelta(days=1)).strftime(dt_fmt)
 
-    aer_figure = 'https://s3-us-west-2.amazonaws.com/arm-ena-data/figures/{}_aerosol.png'.format(date_as_string)
-    met_figure = 'https://s3-us-west-2.amazonaws.com/arm-ena-data/figures/{}_met.png'.format(date_as_string)
-    rose_figure = 'https://s3-us-west-2.amazonaws.com/arm-ena-data/figures/{}_windrose.png'.format(date_as_string)
-    #aer_figure = url_for('static', filename='figures/{}_aerosol.png'.format(date_as_string))
-    #met_figure = url_for('static', filename='figures/{}_met.png'.format(date_as_string))
+    s3_prefix = 'https://s3-us-west-2.amazonaws.com/arm-ena-data/figures/'
 
-    args = {'aer': aer_figure,
-            'met': met_figure,
-            'rose': rose_figure,
+    args = {'aer':  '{}{}_aerosol.png'.format(s3_prefix, date_as_string),
+            'met':  '{}{}_met.png'.format(s3_prefix, date_as_string),
+            'rose': '{}{}_windrose.png'.format(s3_prefix, date_as_string),
             'date': date_as_string,
             'next': next_date,
             'prev': prev_date}
@@ -49,13 +44,13 @@ def cases():
                     names=['tstamp', 'case_date', 'description', 'category'],
                     parse_dates=[0,],
                     header=0)
+
     table['case_dt'] = table['case_date'].apply(lambda x: datetime.datetime.strptime(x, '%m/%d/%Y'))
     new_table = table.set_index('case_dt')[['description', 'category']].sort_index()
 
     d = new_table.groupby('category').apply(lambda x: x.to_dict()).to_dict()
 
     return render_template('interesting_cases.html', cases=d)
-
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080, host='0.0.0.0')

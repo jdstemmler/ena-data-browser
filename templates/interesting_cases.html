@@ -6,18 +6,24 @@
 
 <div class="col-md-4">
 
-<table class="table table-bordered table-hover table-condensed cases">
-  <tr><th>{{ category }}</th></tr>
+  <table class="table table-bordered table-hover table-condensed cases">
 
-  {% for date, description in frames['description'].iteritems() %}
-    <tr><td><a href="{{ url_for('date_page', date=date.strftime('%Y-%m-%d')) }}">
-      <strong>{{ date.strftime('%Y-%m-%d') }}</strong>
-      <br>
-      {{ description }}
-    </a></td></tr>
-  {% endfor %}
+    <tr>
+      <th>{{ category }}</th>
+    </tr>
 
-</table>
+    {% for date, description in frames['description'].iteritems() %}
+      <tr>
+        <td>
+          <a href="{{ url_for('date_page', date=date.strftime('%Y-%m-%d')) }}">
+            <strong>{{ date.strftime('%Y-%m-%d') }}</strong><br>
+            {{ description }}
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+
+  </table>
 
 </div>
 
