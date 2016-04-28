@@ -25,8 +25,10 @@ def date_page(date):
     next_date = (date_as_dt + datetime.timedelta(days=1)).strftime(dt_fmt)
     prev_date = (date_as_dt - datetime.timedelta(days=1)).strftime(dt_fmt)
 
-    aer_figure = url_for('static', filename='figures/{}_aerosol.png'.format(date_as_string))
-    met_figure = url_for('static', filename='figures/{}_met.png'.format(date_as_string))
+    aer_figure = 'https://s3-us-west-2.amazonaws.com/arm-ena-data/figures/{}_aerosol.png'.format(date_as_string)
+    met_figure = 'https://s3-us-west-2.amazonaws.com/arm-ena-data/figures/{}_met.png'.format(date_as_string)
+    #aer_figure = url_for('static', filename='figures/{}_aerosol.png'.format(date_as_string))
+    #met_figure = url_for('static', filename='figures/{}_met.png'.format(date_as_string))
 
     args = {'aer': aer_figure,
             'met': met_figure,
