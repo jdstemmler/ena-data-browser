@@ -5,6 +5,7 @@ import datetime
 
 app = Flask(__name__)
 
+
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == "POST":
@@ -13,6 +14,7 @@ def index():
             return redirect(url_for('date_page', date=result))
     else:
         return render_template('index.html')
+
 
 @app.route('/date/<date>')
 def date_page(date):
@@ -36,14 +38,20 @@ def date_page(date):
 
     return render_template('date_page.html', **args)
 
+
 @app.route('/interesting_cases')
 def cases():
-    table = pd.read_csv('https://docs.google.com/spreadsheets/d/' +
-                    '1j-yL-SXwPXMxEzhrx7plkggPYJ6WlHD3EM7gVte7Ba8/' +
-                    'pub?gid=1851660263&single=true&output=csv',
-                    names=['tstamp', 'case_date', 'description', 'category'],
-                    parse_dates=[0,],
-                    header=0)
+    # table = pd.read_csv('https://docs.google.com/spreadsheets/d/' +
+    #                 '1j-yL-SXwPXMxEzhrx7plkggPYJ6WlHD3EM7gVte7Ba8/' +
+    #                 'pub?gid=1851660263&single=true&output=csv',
+    #                 names=['tstamp', 'case_date', 'description', 'category'],
+    #                 parse_dates=[0,],
+    #                 header=0)
+
+    table = pd.read_csv('interesting_cases.csv',
+                        names=['tstamp', 'case_date', 'description', 'category'],
+                        parse_dates=[0,],
+                        header=0)
 
     table['case_dt'] = table['case_date'].apply(lambda x: datetime.datetime.strptime(x, '%m/%d/%Y'))
     new_table = table.set_index('case_dt')[['description', 'category']].sort_index()
