@@ -9,15 +9,22 @@ app = Flask(__name__)
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == "POST":
-        result = request.form.get('date')
-        if result is not None:
-            return redirect(url_for('date_page', date=result))
+        date = request.form.get('date')
+        radar = request.form.get('radar', 'bl')
+        if date is not None:
+            return redirect(url_for('date_page', date=date, radar=radar))
     else:
         return render_template('index.html')
 
 
+@app.route('/<date>')
 @app.route('/date/<date>')
-def date_page(date):
+def redirect_to_date(date):
+    return redirect(url_for('date_page', date=date, radar='full'))
+
+
+@app.route('/<radar>/<date>') #, methods=['POST', 'GET'])
+def date_page(date, radar='bl'):
 
     date_as_dt = parse(date)
     dt_fmt = '%Y-%m-%d'
@@ -29,12 +36,17 @@ def date_page(date):
 
     s3_prefix = 'https://s3-us-west-2.amazonaws.com/arm-ena-data/figures/'
 
+    # radar_change = request.form.get('radar', None)
+    # if radar_change is not None:
+    #     radar = radar_change
+
     args = {'aer':  '{}{}_aerosol.png'.format(s3_prefix, date_as_string),
-            'met':  '{}{}_met.png'.format(s3_prefix, date_as_string),
+            'met':  '{}{}_met_{}.png'.format(s3_prefix, date_as_string, radar),
             'rose': '{}{}_windrose.png'.format(s3_prefix, date_as_string),
             'date': date_as_string,
             'next': next_date,
-            'prev': prev_date}
+            'prev': prev_date,
+            'radar': radar}
 
     return render_template('date_page.html', **args)
 

@@ -4,7 +4,34 @@
 
 {% include 'title_block.html' %}
 
-<div class="row" style="padding-top:15px">
+<div class="row" style="padding-top:10px">
+  <div class="col-sm-12 col-md-6 col-md-offset-6 text-center">
+    <a class="btn btn-default {{ 'active' if radar=='full' }}"
+        href="{{ url_for('date_page', date=date, radar='full') }}" role="button">Full Height</a>
+    <a class="btn btn-default {{ 'active' if radar=='bl' }}"
+        href="{{ url_for('date_page', date=date, radar='bl') }}" role="button">Boundary Layer</a>
+    <!-- <form>
+      <button class="btn btn-default {{ 'active' if radar=='full' }}"
+              type="submit"
+              formaction="{{ url_for('date_page', date=date, radar=radar) }}"
+              value="full"
+              name="radar"
+              formmethod="POST">
+        Full Height
+      </button>
+      <button class="btn btn-default {{ 'active' if radar=='bl' }}"
+              type="submit"
+              formaction="{{ url_for('date_page', date=date, radar=radar) }}"
+              value="bl"
+              name="radar"
+              formmethod="POST">
+        Boundary Layer
+      </button>
+    </form> -->
+  </div>
+</div>
+
+<div class="row" style="padding-top:5px">
   <div class="col-md-6">
     <a href={{ aer }}><img src={{ aer }} class="img-responsive"></a>
   </div>
@@ -15,7 +42,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-8 col-md-offset-2">
         <a href={{ rose }}><img src={{ rose }} class="img-responsive"></a>
       </div>
     </div>
