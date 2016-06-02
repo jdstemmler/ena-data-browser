@@ -58,3 +58,5 @@ target/
 # *.png
 PRT*
 interesting_cases.csv
+
+.venv
