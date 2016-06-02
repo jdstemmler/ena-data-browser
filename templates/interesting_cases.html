@@ -15,8 +15,8 @@
     {% for date, description in frames['description'].iteritems() %}
       <tr>
         <td>
-          <a href="{{ url_for('date_page', date=date.strftime('%Y-%m-%d'), radar='full') }}">
-            <strong>{{ date.strftime('%Y-%m-%d') }}</strong><br>
+          <a href="{{ url_for('date_page', date=date.strftime('%Y-%b-%d'), radar='full') }}">
+            <strong>{{ date.strftime('%Y %b %d') }}</strong><br>
             {{ description }}
           </a>
         </td>

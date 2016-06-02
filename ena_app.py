@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, url_for, redirect
 import pandas as pd
 from dateutil.parser import parse
 import datetime
+from collections import OrderedDict
 
 app = Flask(__name__)
 
@@ -26,13 +27,15 @@ def redirect_to_date(date):
 @app.route('/<radar>/<date>') #, methods=['POST', 'GET'])
 def date_page(date, radar='bl'):
 
-    date_as_dt = parse(date)
-    dt_fmt = '%Y-%m-%d'
+    date = parse(date)
+    dt_fmt = '%Y %b %d'
+    s3_fmt = '%Y-%m-%d'
+    link_fmt = '%Y-%b-%d'
 
-    date_as_string = date_as_dt.strftime(dt_fmt)
+    date_as_string = date.strftime(dt_fmt)
 
-    next_date = (date_as_dt + datetime.timedelta(days=1)).strftime(dt_fmt)
-    prev_date = (date_as_dt - datetime.timedelta(days=1)).strftime(dt_fmt)
+    next_date = (date + datetime.timedelta(days=1)) # .strftime(dt_fmt)
+    prev_date = (date - datetime.timedelta(days=1)) # .strftime(dt_fmt)
 
     s3_prefix = 'https://s3-us-west-2.amazonaws.com/arm-ena-data/figures/'
 
@@ -40,12 +43,13 @@ def date_page(date, radar='bl'):
     # if radar_change is not None:
     #     radar = radar_change
 
-    args = {'aer':  '{}{}_aerosol.png'.format(s3_prefix, date_as_string),
-            'met':  '{}{}_met_{}.png'.format(s3_prefix, date_as_string, radar),
-            'rose': '{}{}_windrose.png'.format(s3_prefix, date_as_string),
-            'date': date_as_string,
-            'next': next_date,
-            'prev': prev_date,
+    args = {'aer':  date.strftime('{}{}_aerosol.png'.format(s3_prefix, s3_fmt)).lower(),
+            'met':  date.strftime('{}{}_met_{}.png'.format(s3_prefix, s3_fmt, radar)).lower(),
+            'rose': date.strftime('{}{}_windrose.png'.format(s3_prefix, s3_fmt)).lower(),
+            'dates': (prev_date.strftime(link_fmt), date.strftime(link_fmt), next_date.strftime(link_fmt)),
+            'current': date_as_string,
+            'next': next_date.strftime(dt_fmt),
+            'prev': prev_date.strftime(dt_fmt),
             'radar': radar}
 
     return render_template('date_page.html', **args)
@@ -68,9 +72,17 @@ def cases():
     table['case_dt'] = table['case_date'].apply(lambda x: datetime.datetime.strptime(x, '%m/%d/%Y'))
     new_table = table.set_index('case_dt')[['description', 'category']].sort_index()
 
-    d = new_table.groupby('category').apply(lambda x: x.to_dict()).to_dict()
+    grouped = new_table.groupby('category')
+    sorted_categories = grouped.count().sort_values('description', ascending=False)
+
+    d = OrderedDict()
+    for i, j in sorted_categories.iterrows():
+        d[i] = grouped.get_group(i).to_dict()
+
+    #d = new_table.groupby('category').apply(lambda x: x.to_dict()).to_dict()
 
     return render_template('interesting_cases.html', cases=d)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080, host='0.0.0.0')
+    # app.run(debug=True, port=8080, host='0.0.0.0')
+    app.run(debug=True, port=8080)

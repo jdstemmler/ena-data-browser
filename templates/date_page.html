@@ -7,9 +7,9 @@
 <div class="row" style="padding-top:10px">
   <div class="col-sm-12 col-md-6 col-md-offset-6 text-center">
     <a class="btn btn-default {{ 'active' if radar=='full' }}"
-        href="{{ url_for('date_page', date=date, radar='full') }}" role="button">Full Height</a>
+        href="{{ url_for('date_page', date=dates[1], radar='full') }}" role="button">Full Height</a>
     <a class="btn btn-default {{ 'active' if radar=='bl' }}"
-        href="{{ url_for('date_page', date=date, radar='bl') }}" role="button">Boundary Layer</a>
+        href="{{ url_for('date_page', date=dates[1], radar='bl') }}" role="button">Boundary Layer</a>
     <!-- <form>
       <button class="btn btn-default {{ 'active' if radar=='full' }}"
               type="submit"
