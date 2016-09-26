@@ -17,7 +17,7 @@ def index():
     else:
         return render_template('index.html')
 
-
+    
 @app.route('/<date>')
 @app.route('/date/<date>')
 def redirect_to_date(date):
@@ -32,7 +32,7 @@ def date_page(date, radar='bl'):
     s3_fmt = '%Y-%m-%d'
     link_fmt = '%Y-%b-%d'
 
-    date_as_string = date.strftime(dt_fmt)
+    date_as_string = date.strftime(s3_fmt)
 
     next_date = (date + datetime.timedelta(days=1)) # .strftime(dt_fmt)
     prev_date = (date - datetime.timedelta(days=1)) # .strftime(dt_fmt)
@@ -52,7 +52,7 @@ def date_page(date, radar='bl'):
             'prev': prev_date.strftime(dt_fmt),
             'radar': radar}
 
-    return render_template('date_page.html', **args)
+    return render_template('new_date_page.html', **args)
 
 
 @app.route('/interesting_cases')
