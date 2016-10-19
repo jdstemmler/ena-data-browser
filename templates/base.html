@@ -10,12 +10,17 @@
       <title>ENA Data Browser</title><!-- Bootstrap core CSS -->
       <link href="{{ url_for("static", filename="css/bootstrap.min.css") }}" rel="stylesheet">
       <link href="{{ url_for("static", filename="custom/custom.css") }}" rel="stylesheet">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+      </script>
+      <script>
+      window.jQuery || document.write('<script src="{{ url_for("static", filename="js/jquery.min.js") }}"><\/script>')
+      </script>
   </head>
   <body>
       <!-- Fixed navbar -->
       {% include 'navbar.html' %}
 
-      <div class="container">
+      <div class="container" style="width:95%">
           {% block content %}
           {% endblock %}
       </div><!-- /container -->
@@ -24,14 +29,13 @@
       <!-- Bootstrap core JavaScript
       ================================================== -->
       <!-- Placed at the end of the document so the pages load faster -->
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
-      </script>
-      <script>
-      window.jQuery || document.write('<script src="{{ url_for("static", filename="js/vendor/jquery.min.js") }}"><\/script>')
+
+      <!-- <script type=text/javascript src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script> -->
+      <script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
       </script>
       <script src="{{ url_for("static", filename="js/bootstrap.min.js") }}">
       </script> <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-
       <!-- <script src="../static/js/ie10-viewport-bug-workaround.js">
       </script> -->
   </body>

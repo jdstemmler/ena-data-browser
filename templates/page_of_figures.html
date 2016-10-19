@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include 'title_block.html' %}
+
+<div id="plot-container" class="row" style="padding-top:10px">
+<form class="form">
+    <div id="left-column" class="col-md-6 plot-column">
+        <div class="col-xs-12 plot" id="uhsas">
+            <img class="img-responsive" src="/static/figures/{{ p.uhsas }}-{{ date_str }}.png">
+        </div>
+
+        <div class="col-xs-12 plot" id="total-concentration">
+            <img class="img-responsive" src="/static/figures/{{ p.aerosol }}-{{ date_str }}.png">
+        </div>
+
+        <div class="col-xs-12 plot" id="aerosol-scattering">
+            <img class="img-responsive" src="/static/figures/{{ p.scattering }}-{{ date_str }}.png">
+        </div>
+
+        <div class="col-xs-12 plot" id="ccn">
+            <img class="img-responsive" src="/static/figures/{{ p.ccn }}-{{ date_str }}.png">
+        </div>
+
+        <div class="col-xs-12 plot" id="cn">
+            <img class="img-responsive" src="/static/figures/{{ p.cn }}-{{ date_str }}.png">
+        </div>
+
+        <div class="col-xs-12 plot" id="co">
+            <img class="img-responsive" src="/static/figures/{{ p.co }}-{{ date_str }}.png">
+        </div>
+    </div>
+
+    <div id="right-column" class="col-md-6 plot-column">
+        <div class="form-group">
+            <div class="radio-inline">
+                <label>
+                    <input type="radio" name="radar" value="boundary_layer_radar" {{ 'checked' if p.radar=='boundary_layer_radar' }}>
+                    Boundary Layer
+                </label>
+            </div>
+            <div class="radio-inline">
+                <label>
+                    <input type="radio" name="radar" value="full_height_radar" {{ 'checked' if p.radar=='full_height_radar' }}>
+                    Full Height
+                </label>
+
+            </div>
+        </div>
+        <div class="col-xs-12 plot" id="radar">
+            <img class="img-responsive" src="/static/figures/{{ p.radar }}-{{ date_str }}.png">
+        </div>
+
+        <div class="col-xs-12 plot" id="precip">
+            <img class="img-responsive" src="/static/figures/{{ p.precip }}-{{ date_str }}.png">
+        </div>
+
+        <div class="col-xs-12 plot" id="wind">
+            <img class="img-responsive" src="/static/figures/{{ p.wind }}-{{ date_str }}.png">
+        </div>
+
+        <div class="col-xs-12 plot" id="wind-rose">
+            <img class="img-responsive" src="/static/figures/{{ p.rose }}-{{ date_str }}.png">
+        </div>
+
+    </div>
+</form>
+</div>
+
+{% endblock %}

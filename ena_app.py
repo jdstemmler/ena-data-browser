@@ -1,59 +1,98 @@
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, make_response, jsonify, session
+import requests
 import pandas as pd
 from dateutil.parser import parse
 import datetime
 from collections import OrderedDict
+from bs4 import BeautifulSoup
+
+from secret import SECRET
+from plot_types import prefix_to_type, type_to_prefix, prefix_labels
 
 app = Flask(__name__)
+app.secret_key = SECRET
 
-
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/', methods=['GET',])
 def index():
-    if request.method == "POST":
+    return render_template('index.html')
+
+@app.route('/_get_figures_page', methods=['POST',])
+def _get_figures_page():
+    if request.method == 'POST':
         date = request.form.get('date')
-        radar = request.form.get('radar', 'bl')
         if date is not None:
-            return redirect(url_for('date_page', date=date, radar=radar))
+            return redirect(url_for('figures_page', date=date))
     else:
         return render_template('index.html')
 
-    
-@app.route('/<date>')
-@app.route('/date/<date>')
-def redirect_to_date(date):
-    return redirect(url_for('date_page', date=date, radar='full'))
+@app.route('/_get_default_prefix')
+def _get_default_prefix():
+    default_params = {
+        'radar': 'boundary-layer-radar',
+        'precip': 'precip',
+        'wind': 'wind',
+        'rose': 'wind-rose',
+        'uhsas': 'uhsas',
+        'aerosol': 'aerosol-concentration-linear',
+        'scattering': '1um-scattering-linear',
+        'ccn': 'ccn',
+        'cn': 'cn-log',
+        'co': 'co-linear',
+        'soundings': [],
+              }
+    return default_params
 
+@app.route('/_set_session_prefix', methods=['POST',])
+def _set_session_prefix():
 
-@app.route('/<radar>/<date>') #, methods=['POST', 'GET'])
-def date_page(date, radar='bl'):
+    new_prefix = request.form.get('new_prefix', None)
 
-    date = parse(date)
-    dt_fmt = '%Y %b %d'
-    s3_fmt = '%Y-%m-%d'
-    link_fmt = '%Y-%b-%d'
+    if new_prefix is not None:
+        plot_type = prefix_to_type[new_prefix]
 
-    date_as_string = date.strftime(s3_fmt)
+        current_prefixes = session['prefixes']
+        current_prefixes[plot_type] = new_prefix
 
-    next_date = (date + datetime.timedelta(days=1)) # .strftime(dt_fmt)
-    prev_date = (date - datetime.timedelta(days=1)) # .strftime(dt_fmt)
+        session['prefixes'] = current_prefixes
 
-    s3_prefix = 'https://s3-us-west-2.amazonaws.com/arm-ena-data/figures/'
+        return jsonify(plot_type=plot_type, new_prefix=new_prefix)
 
-    # radar_change = request.form.get('radar', None)
-    # if radar_change is not None:
-    #     radar = radar_change
+# @app.route('/_list_soundings', methods=['POST',])
+def _list_soundings(url):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return []
 
-    args = {'aer':  date.strftime('{}{}_aerosol.png'.format(s3_prefix, s3_fmt)).lower(),
-            'met':  date.strftime('{}{}_met_{}.png'.format(s3_prefix, s3_fmt, radar)).lower(),
-            'rose': date.strftime('{}{}_windrose.png'.format(s3_prefix, s3_fmt)).lower(),
-            'dates': (prev_date.strftime(link_fmt), date.strftime(link_fmt), next_date.strftime(link_fmt)),
-            'current': date_as_string,
-            'next': next_date.strftime(dt_fmt),
-            'prev': prev_date.strftime(dt_fmt),
-            'radar': radar}
+    s = BeautifulSoup(r.content)
+    links = s.findAll('a')
 
-    return render_template('new_date_page.html', **args)
+    soundings = [a['href'] for a in links if 'sounding' in a['href']]
 
+    return soundings
+
+@app.route('/date/<date>', methods=['GET', ])
+def figures_page(date):
+
+    if not isinstance(date, datetime.datetime):
+        dt = parse(date)
+    else:
+        dt = date
+
+    global_params = {
+        'date': dt,
+        'next_day': dt + datetime.timedelta(days=1),
+        'prev_day': dt - datetime.timedelta(days=1),
+        'date_str': dt.strftime('%Y-%m-%d'),
+        'plot_url': 'http://atmos.uw.edu/~jstemm/ena-figures/browser-figures/{}/'.format(dt.strftime('%Y-%m-%d')),
+        # 'plot_url': url_for('static', filename='figures/{}/'.format(dt.strftime('%Y-%m-%d')))
+    }
+
+    soundings = _list_soundings(global_params['plot_url'])
+
+    if 'prefixes' not in session:
+        session['prefixes'] = _get_default_prefix()
+
+    return render_template('new_page_of_figures.html', types=type_to_prefix, labels=prefix_labels, soundings=soundings, **global_params)
 
 @app.route('/interesting_cases')
 def cases():
