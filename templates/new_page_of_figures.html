@@ -49,7 +49,7 @@
 
       </div>
     <div class="col-xs-12 plot-image">
-      <a class=image-link id={{ p }} href="{{ plot_url }}{{ session.prefixes[p] }}-{{ date_str }}.png">
+      <a href="{{ plot_url }}{{ session.prefixes[p] }}-{{ date_str }}.png" class=image-link data-lightbox="{{ p }}" id={{ p }}>
         <img class=img-responsive id={{ p }} src="{{ plot_url }}{{ session.prefixes[p] }}-{{ date_str }}.png">
       </a>
       </div>
@@ -64,7 +64,7 @@
   <div id=sounding-container class='col-md-2 plot-column'>
     {% for sounding in soundings if soundings|length>0 %}
     <div class="col-xs-12 plot-image">
-      <a class="image-link sounding" href="{{ plot_url }}{{ sounding }}">
+      <a class="image-link sounding" href="{{ plot_url }}{{ sounding }}" data-lightbox="sounding">
         <img class="img-responsive sounding" src="{{ plot_url }}{{ sounding }}">
       </a>
     </div>

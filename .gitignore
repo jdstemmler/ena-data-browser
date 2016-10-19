@@ -55,9 +55,10 @@ docs/_build/
 
 # PyBuilder
 target/
-*.png
+# *.png
 PRT*
 interesting_cases.csv
 
+figures/
 .venv
 .idea
