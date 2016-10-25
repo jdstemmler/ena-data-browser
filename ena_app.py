@@ -16,6 +16,10 @@ app.secret_key = SECRET
 def index():
     return render_template('index.html')
 
+@app.route('/favicon.ico')
+def favicon():
+    return redirect(url_for("static", filename="images/favicon.ico"))
+
 @app.route('/_get_figures_page', methods=['POST',])
 def _get_figures_page():
     if request.method == 'POST':
