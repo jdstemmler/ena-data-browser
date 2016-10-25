@@ -20,6 +20,11 @@ def index():
 def favicon():
     return redirect(url_for("static", filename="images/favicon.ico"))
 
+@app.route('/apple-touch-icon-precomposed.png')
+@app.route('/apple-touch-icon.png')
+def apple_touch():
+    return redirect(url_for("static", filename="images/apple-touch-icon-precomposed.png"))
+
 @app.route('/_get_figures_page', methods=['POST',])
 def _get_figures_page():
     if request.method == 'POST':
