@@ -13,7 +13,7 @@
                $('a#'+data['plot_type']).attr('href', '{{ plot_url }}'+data["new_prefix"]+'-{{ date_str }}.png');
                $('img#'+data['plot_type']).attr('src', '{{ plot_url }}'+data["new_prefix"]+'-{{ date_str }}.png');
                $('button.'+data['plot_type']).attr('class', 'btn btn-default btn-xs change-plot '+data['plot_type']);
-               $('button#'+data['new_prefix']).attr('class', 'btn btn-default btn-xs change-plot active '+data['plot_type']);
+               $('button#'+data['new_prefix']).attr('class', 'btn btn-primary btn-xs change-plot '+data['plot_type']);
                // $('#session').text( "{{ session }}|e" );
              }
            );
@@ -24,10 +24,6 @@
 </script>
 
 {% include 'title_block.html' %}
-
-<!-- <div class="col-xs-12">
-  <span id=session>{{ session }}<span>
-</div> -->
 
 <div id="plot-container" class="row" style="padding-top:10px">
 
@@ -42,7 +38,7 @@
       <div class="col-xs-12 plot-options">
 
       {% for prefix in types[p] if types[p]|length>1 %}
-        <button class='btn btn-default btn-xs change-plot {{ p }} {{ 'active' if session.prefixes[p]==prefix }}' id={{ prefix }}>
+        <button class='btn btn-{{ 'primary' if session.prefixes[p]==prefix else 'default'  }} btn-xs change-plot {{ p }}' id={{ prefix }}>
           {{ labels[prefix] }}
         </button>
       {% endfor %}

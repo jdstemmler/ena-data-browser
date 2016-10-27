@@ -6,7 +6,7 @@
 
 <div class="col-sm-6 col-lg-4">
 
-  <table class="table table-bordered table-hover table-condensed cases">
+  <table class="table table-bordered table-hover table-condensed table-striped cases">
 
     <tr>
       <th>{{ category }}</th>
@@ -15,7 +15,7 @@
     {% for date, description in frames['description'].iteritems() %}
       <tr>
         <td>
-          <a href="{{ url_for('figures_page', date=date.strftime('%Y-%b-%d')) }}">
+          <a href="{{ url_for('figures_page', date=date.strftime('%Y-%m-%d')) }}">
             <strong>{{ date.strftime('%Y %b %d') }}</strong><br>
             {{ description }}
           </a>
