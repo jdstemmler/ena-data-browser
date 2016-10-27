@@ -68,16 +68,20 @@ def _set_session_prefix():
 
 # @app.route('/_list_soundings', methods=['POST',])
 def _list_soundings(url):
-    r = requests.get(url)
-    if r.status_code != 200:
+    try:
+        r = requests.get(url, timeout=2)
+        if r.status_code != 200:
+            return []
+
+        s = BeautifulSoup(r.content, "html.parser")
+        links = s.findAll('a')
+
+        soundings = [a['href'] for a in links if 'sounding' in a['href']]
+
+        return soundings
+
+    except requests.exceptions.Timeout:
         return []
-
-    s = BeautifulSoup(r.content)
-    links = s.findAll('a')
-
-    soundings = [a['href'] for a in links if 'sounding' in a['href']]
-
-    return soundings
 
 @app.route('/date/<date>', methods=['GET', ])
 def figures_page(date):
@@ -152,7 +156,7 @@ def worldview_image(resource, date):
                  'Calipso_Orbit_Asc,Coastlines,,,,,,AMSR2_Cloud_Liquid_Water_Day(hidden),AMSR2_Cloud_Liquid_Water_Night(hidden),' \
                  'AMSR2_Wind_Speed_Day(hidden),AMSR2_Wind_Speed_Night(hidden),'
         v = '-160.453125,-57.09375,74.390625,78.1875'
-        
+
         full_url = '{base_url}?p=geographic&l={layers}&t={date}&v={v}'.format(base_url=base_url, layers=layers, date=date, v=v)
 
         return redirect(full_url)
