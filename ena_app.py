@@ -103,6 +103,64 @@ def figures_page(date):
 
     return render_template('new_page_of_figures.html', types=type_to_prefix, labels=prefix_labels, soundings=soundings, **global_params)
 
+@app.route('/worldview/<resource>/<date>')
+def worldview_image(resource, date):
+
+    #worldview page
+    # https://worldview.earthdata.nasa.gov/?
+    # p=geographic&
+    # l=MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor(hidden),
+    #   MODIS_Aqua_CorrectedReflectance_Bands721(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),,
+    #   Calipso_Orbit_Asc,Coastlines,,,,,,AMSR2_Cloud_Liquid_Water_Day(hidden),AMSR2_Cloud_Liquid_Water_Night(hidden),
+    #   AMSR2_Wind_Speed_Day(hidden),AMSR2_Wind_Speed_Night(hidden),&
+    # t=2016-08-19
+
+    # static image
+    # http://gibs.earthdata.nasa.gov/image-download?
+    # TIME=2016300&
+    # extent=extent=-79.875,0,0,60.75&
+    # epsg=4326&
+    # layers=MODIS_Aqua_CorrectedReflectance_TrueColor,Coastlines&
+    # opacities=1,1&
+    # worldfile=false&
+    # format=image/jpeg&
+    # width=909&height=691
+
+    if resource == 'static':
+
+        params = {'base_url': 'http://gibs.earthdata.nasa.gov/image-download',
+                  'TIME': datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%Y%j'),
+                  'extent': '-79.875,0,0,60.75',
+                  'layers': 'MODIS_Aqua_CorrectedReflectance_TrueColor,Coastlines',
+                  'opacities': '1,1',
+                  'worldfile': 'false',
+                  'format': 'image/jpeg',
+                  'epsg': 4326,
+                  'width': '909',
+                  'height': '691'}
+
+        full_url = '{base_url}?TIME={TIME}&extent={extent}&epsg={epsg}&layers={layers}&opacities={opacities}&' \
+                   'worldfile={worldfile}&format={format}&width={width}&height={height}'.format(**params)
+        return redirect(full_url)
+
+    elif resource == 'dynamic':
+
+        base_url = 'https://worldview.earthdata.nasa.gov/'
+
+        layers = 'MODIS_Aqua_CorrectedReflectance_TrueColor,MODIS_Terra_CorrectedReflectance_TrueColor(hidden),' \
+                 'MODIS_Aqua_CorrectedReflectance_Bands721(hidden),MODIS_Terra_CorrectedReflectance_Bands721(hidden),,' \
+                 'Calipso_Orbit_Asc,Coastlines,,,,,,AMSR2_Cloud_Liquid_Water_Day(hidden),AMSR2_Cloud_Liquid_Water_Night(hidden),' \
+                 'AMSR2_Wind_Speed_Day(hidden),AMSR2_Wind_Speed_Night(hidden),'
+        v = '-160.453125,-57.09375,74.390625,78.1875'
+        
+        full_url = '{base_url}?p=geographic&l={layers}&t={date}&v={v}'.format(base_url=base_url, layers=layers, date=date, v=v)
+
+        return redirect(full_url)
+
+    else:
+
+        return None
+
 @app.route('/interesting_cases')
 def cases():
     # table = pd.read_csv('https://docs.google.com/spreadsheets/d/' +
