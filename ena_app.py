@@ -107,6 +107,28 @@ def figures_page(date):
 
     return render_template('new_page_of_figures.html', types=type_to_prefix, labels=prefix_labels, soundings=soundings, **global_params)
 
+@app.route('/bl/<date>')
+def redirect_bl(date):
+    if 'prefixes' not in session:
+        s = _get_default_prefix()
+    else:
+        s = session['prefixes']
+    s['radar'] = 'boundary-layer-radar'
+    session['prefixes'] = s
+
+    return redirect(url_for('figures_page', date=date))
+
+@app.route('/full/<date>')
+def redirect_full(date):
+    if 'prefixes' not in session:
+        s = _get_default_prefix()
+    else:
+        s = session['prefixes']
+    s['radar'] = 'full-height-radar'
+    session['prefixes'] = s
+
+    return redirect(url_for('figures_page', date=date))
+
 @app.route('/worldview/<resource>/<date>')
 def worldview_image(resource, date):
 
