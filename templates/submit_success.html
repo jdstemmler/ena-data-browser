@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col-xs-12 col-md-offset-4 col-md-4">
+<h2>SUCCESS!</h2>
+
+<h4>You submited the date</h4>
+{{ date }}
+
+<h4>with the categories</h4>
+<ul>
+  {% for l in categories %}
+  <li>{{ l }}</li>
+  {% endfor %}
+</ul>
+
+<h4>for the reason</h4>
+<p>{{ description }}
+
+<h4>and your info is </h4>
+{{ name }} {{ email }}
+
+<h2>You may now close this tab</h2>
+</div>
+{% endblock %}
