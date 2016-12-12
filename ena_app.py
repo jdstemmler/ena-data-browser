@@ -22,7 +22,8 @@ app.secret_key = SECRET
 
 @app.route('/', methods=['GET',])
 def index():
-    return render_template('index.html')
+    default_date = (datetime.datetime.now()-datetime.timedelta(days=7)).strftime('%Y-%m-%d')
+    return render_template('index.html', date=default_date)
 
 @app.route('/favicon.ico')
 def favicon():
@@ -140,8 +141,10 @@ def redirect_full(date):
 
 @app.route('/submit_case')
 def submit_case():
-    d = request.args.get('date', '')
-    return render_template('case_submission.html', site_key=recaptcha['site-key'], date=d)
+    # d = request.args.get('date', '')
+    # date_class = request.args.get('date_class', '')
+
+    return render_template('case_submission.html', site_key=recaptcha['site-key'], d=request.args)
 
 @app.route('/_submit_case', methods=['POST', 'GET'])
 def _submit_case():
@@ -166,6 +169,12 @@ def _submit_case():
 
         # s = 'date: {}  categories: {}  description: {}'.format(case_date, categories, case_description)
 
+        if (case_date is None) or (len(case_date) == 0):
+            return redirect(url_for('submit_case', date_class='has-error'))
+
+        if (case_description is None) or (len(case_description) == 0):
+            return redirect(url_for('submit_case', date=case_date, desc_class='has-error'))
+
         if other_categories is not None:
             categories.extend([s.strip() for s in other_categories.split(',')])
 
@@ -183,6 +192,7 @@ def _submit_case():
         req = requests.post(url=sheetsu['URL'], headers=headers, json=payload, auth=sheetsu_auth)
 
         if req.status_code == 201:
+        # if 1==1:
             return render_template('submit_success.html',
                                    date=case_date,
                                    categories=categories,
