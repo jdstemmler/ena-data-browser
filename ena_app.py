@@ -1,3 +1,5 @@
+import io
+import json
 from flask import Flask, render_template, request, url_for, redirect, make_response, jsonify, session
 import requests
 import pandas as pd
@@ -8,6 +10,12 @@ from bs4 import BeautifulSoup
 
 from secret import SECRET
 from plot_types import prefix_to_type, type_to_prefix, prefix_labels
+
+with io.open('.recaptcha') as cred:
+    recaptcha = json.load(cred)
+
+with io.open('.sheetsu') as cred:
+    sheetsu = json.load(cred)
 
 app = Flask(__name__)
 app.secret_key = SECRET
@@ -129,6 +137,62 @@ def redirect_full(date):
 
     return redirect(url_for('figures_page', date=date))
 
+
+@app.route('/submit_case')
+def submit_case():
+    d = request.args.get('date', '')
+    return render_template('case_submission.html', site_key=recaptcha['site-key'], date=d)
+
+@app.route('/_submit_case', methods=['POST', 'GET'])
+def _submit_case():
+    form = request.form
+
+    gcaptcha = form.get('g-recaptcha-response', None)
+    if gcaptcha is not None:
+        gcaptcha_payload = {'secret': recaptcha['secret-key'],
+                            'response': gcaptcha}
+        captcha_response = requests.post("https://www.google.com/recaptcha/api/siteverify", data=gcaptcha_payload)
+        verified = captcha_response.json()['success']
+    else:
+        verified = True
+
+    if verified:
+        categories = form.getlist('category', None)
+        other_categories = form.get('other_tags', None)
+        case_date = form.get('case_date', None)
+        case_description = form.get('case_description', None)
+        email = form.get('email', None)
+        name = form.get('name', None)
+
+        # s = 'date: {}  categories: {}  description: {}'.format(case_date, categories, case_description)
+
+        if other_categories is not None:
+            categories.extend([s.strip() for s in other_categories.split(',')])
+
+        payload = {'Timestamp': datetime.datetime.now().strftime('%m/%d/%Y %H:%M:%S'),
+                   'Date': datetime.datetime.strptime(case_date, '%Y-%m-%d').strftime('%m/%d/%Y'),
+                   'Description (optional)': case_description,
+                   'Category': ', '.join(categories),
+                   'Email': email,
+                   'Name': name}
+
+        headers = {"Content-Type": "application/json"}
+
+        sheetsu_auth = (sheetsu['API_KEY'], sheetsu['API_SECRET'])
+
+        req = requests.post(url=sheetsu['URL'], headers=headers, json=payload, auth=sheetsu_auth)
+
+        if req.status_code == 201:
+            return render_template('submit_success.html',
+                                   date=case_date,
+                                   categories=categories,
+                                   description=case_description,
+                                   name=name, email=email)
+        else:
+            return "ERROR: {}\nStatus Code: {}".format(req.content, req.status_code)
+    else:
+        return "ERROR - It appears that you are a robot"
+
 @app.route('/worldview/<resource>/<date>')
 def worldview_image(resource, date):
 
@@ -192,12 +256,12 @@ def cases():
     # table = pd.read_csv('https://docs.google.com/spreadsheets/d/' +
     #                 '1j-yL-SXwPXMxEzhrx7plkggPYJ6WlHD3EM7gVte7Ba8/' +
     #                 'pub?gid=1851660263&single=true&output=csv',
-    #                 names=['tstamp', 'case_date', 'description', 'category'],
+    #                 names=['tstamp', 'case_date', 'description', 'category', 'name', 'email'],
     #                 parse_dates=[0,],
     #                 header=0)
 
     table = pd.read_csv('interesting_cases.csv',
-                        names=['tstamp', 'case_date', 'description', 'category'],
+                        names=['tstamp', 'case_date', 'description', 'category', 'name', 'email'],
                         parse_dates=[0,],
                         header=0)
 
