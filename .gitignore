@@ -62,3 +62,6 @@ interesting_cases.csv
 figures/
 .venv
 .idea
+
+.recaptcha
+.sheetsu
