@@ -63,5 +63,4 @@ figures/
 .venv
 .idea
 
-.recaptcha
-.sheetsu
+instance/

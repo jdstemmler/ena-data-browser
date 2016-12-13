@@ -1,24 +1,66 @@
 import io
+import os
 import json
-from flask import Flask, render_template, request, url_for, redirect, make_response, jsonify, session
+from flask import Flask, render_template, request, url_for, redirect, make_response, jsonify, session, g, flash
 import requests
+import sqlite3
 import pandas as pd
 from dateutil.parser import parse
 import datetime
 from collections import OrderedDict
 from bs4 import BeautifulSoup
 
-from secret import SECRET
+# from secret import SECRET
 from plot_types import prefix_to_type, type_to_prefix, prefix_labels
 
-with io.open('.recaptcha') as cred:
+app = Flask(__name__)
+app.config.from_object(__name__)
+
+def instance_file(f):
+    return os.path.join(app.instance_path, f)
+
+with io.open(instance_file('.recaptcha')) as cred:
     recaptcha = json.load(cred)
 
-with io.open('.sheetsu') as cred:
+with io.open(instance_file('.sheetsu')) as cred:
     sheetsu = json.load(cred)
 
-app = Flask(__name__)
-app.secret_key = SECRET
+app.config['SECRET_KEY'] = io.open(instance_file('.flask_secret'), 'rb').read()
+app.config.update(dict(
+    DATABASE=instance_file('cases.db'),
+))
+
+def connect_db():
+    """Connects to the specific database."""
+    rv = sqlite3.connect(app.config['DATABASE'])
+    rv.row_factory = sqlite3.Row
+    return rv
+
+def get_db():
+    """Opens a new database connection if there is none yet for the
+    current application context.
+    """
+    if not hasattr(g, 'sqlite_db'):
+        g.sqlite_db = connect_db()
+    return g.sqlite_db
+
+@app.teardown_appcontext
+def close_db(error):
+    """Closes the database again at the end of the request."""
+    if hasattr(g, 'sqlite_db'):
+        g.sqlite_db.close()
+
+def init_db():
+    db = get_db()
+    with app.open_resource('schema.sql', mode='r') as f:
+        db.cursor().executescript(f.read())
+    db.commit()
+
+@app.cli.command('initdb')
+def initdb_command():
+    """Initializes the database."""
+    init_db()
+    print('Initialized the database.')
 
 @app.route('/', methods=['GET',])
 def index():
@@ -141,10 +183,8 @@ def redirect_full(date):
 
 @app.route('/submit_case')
 def submit_case():
-    # d = request.args.get('date', '')
-    # date_class = request.args.get('date_class', '')
-
     return render_template('case_submission.html', site_key=recaptcha['site-key'], d=request.args)
+
 
 @app.route('/_submit_case', methods=['POST', 'GET'])
 def _submit_case():
@@ -157,7 +197,7 @@ def _submit_case():
         captcha_response = requests.post("https://www.google.com/recaptcha/api/siteverify", data=gcaptcha_payload)
         verified = captcha_response.json()['success']
     else:
-        verified = True
+        verified = False
 
     if verified:
         categories = form.getlist('category', None)
@@ -185,23 +225,40 @@ def _submit_case():
                    'Email': email,
                    'Name': name}
 
-        headers = {"Content-Type": "application/json"}
+        stsu = write_case_to_sheetsu(payload)
+        sql = write_case_to_sqlite(case_date, case_description, categories, name, email)
 
-        sheetsu_auth = (sheetsu['API_KEY'], sheetsu['API_SECRET'])
+        return stsu
 
-        req = requests.post(url=sheetsu['URL'], headers=headers, json=payload, auth=sheetsu_auth)
-
-        if req.status_code == 201:
-        # if 1==1:
-            return render_template('submit_success.html',
-                                   date=case_date,
-                                   categories=categories,
-                                   description=case_description,
-                                   name=name, email=email)
-        else:
-            return "ERROR: {}\nStatus Code: {}".format(req.content, req.status_code)
     else:
         return "ERROR - It appears that you are a robot"
+
+def write_case_to_sheetsu(payload, headers={"Content-Type": "application/json"}):
+    sheetsu_auth = (sheetsu['API_KEY'], sheetsu['API_SECRET'])
+    req = requests.post(url=sheetsu['URL'], headers=headers, json=payload, auth=sheetsu_auth)
+    if req.status_code == 201:
+        return render_template('submit_success.html',
+                               date=payload['Date'],
+                               categories=payload['Category'].split(', '),
+                               description=payload['Description (optional)'],
+                               name=payload['Name'], email=payload['Email'])
+    else:
+        return "ERROR: {}\nStatus Code: {}".format(req.content, req.status_code)
+
+def write_case_to_sqlite(case_date, case_description, categories, name, email):
+    db = get_db()
+    query = 'insert into cases (date_submitted, case_date, description, categories, name, email) values (?, ?, ?, ?, ?, ?)'
+    values = [datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+              case_date, case_description, ', '.join(categories), name, email]
+    db.execute(query, values)
+    db.commit()
+    flash("Interesting Case was submitted successfully!")
+
+    return render_template('submit_success.html',
+                           date=case_date,
+                           categories=categories,
+                           description=case_description,
+                           name=name, email=email)
 
 @app.route('/worldview/<resource>/<date>')
 def worldview_image(resource, date):
@@ -291,4 +348,5 @@ def cases():
 
 if __name__ == '__main__':
     # app.run(debug=True, port=8080, host='0.0.0.0')
-    app.run(debug=True, port=8080)
+    # app.run(debug=True, port=8080)
+    pass
