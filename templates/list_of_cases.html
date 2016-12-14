@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="col-xs-12 col-sm-3">
+  <div class="col-xs-12">
+    <label><h3>Categories</h3></label>
+  </div>
+  <!-- <table id="listOfCategories" class="table table-bordered table-hover table-condensed table-striped cases"> -->
+
+    {% for row in categories %}
+
+    <!-- <tr> -->
+    <div class="col-xs-12 col-sm-12" style="padding-bottom:5px">
+      <form action="/interesting_cases" method="POST">
+        <!-- <td class="{{ 'info' if row|lower == category|lower }}"> -->
+          <button class="btn btn-default btn-block {{ 'btn-primary' if row|lower == category|lower }}"
+                  role="submit" value="{{ row }}" name="category">
+            {{ row }}
+          </button>
+        <!-- </td> -->
+      </form>
+    <!-- </tr> -->
+    </div>
+    {% endfor %}
+  <!-- </table> -->
+</div>
+
+<div class="col-xs-12 col-sm-9 col-md-8">
+  <label for="listOfCases"><h3>{{ category }}</h3></label>
+  <table id='listOfCases' class="table table-bordered table-hover table-striped cases">
+    {% for row in entries %}
+
+    <tr>
+      <td>
+        <a href="{{ url_for('figures_page', date=row['case_date']) }}">
+          <strong>{{ row['case_date'] }}</strong><br>
+          {{ row['description'] }}
+        </a>
+      </td>
+    </tr>
+
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

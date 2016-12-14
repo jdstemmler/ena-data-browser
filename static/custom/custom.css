@@ -18,8 +18,21 @@ table.cases td {
   vertical-align: top;
   padding: 5px;
   /*padding-bottom: 15px;*/
-  font-size: 12px
+  /*font-size: 12px*/
 }
+
+table.cases tr td a {
+    display:block;
+    height:100%;
+    width:100%;
+    padding: 0px;
+}
+
+table.cases tr td {
+    /*padding-left: 0;*/
+    /*padding-right: 0;*/
+}
+
 
 table a {
   display:block;
@@ -32,6 +45,7 @@ table a:hover {
   /*background-color: lightgray;*/
   text-decoration: none;
 }
+
 
 .plot-container {
 

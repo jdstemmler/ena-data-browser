@@ -62,6 +62,35 @@ def initdb_command():
     init_db()
     print('Initialized the database.')
 
+def query_category(category):
+    db = get_db()
+    query = "select case_date, description from cases where category is ?"
+    cur = db.execute(query, [category, ])
+    entries = cur.fetchall()
+    return entries
+
+def capitalize(s):
+    """Capitalizes the first letter of each word in string 's'"""
+    words = s.split(' ')
+    return ' '.join(word.capitalize() for word in words)
+
+def list_categories():
+    db = get_db()
+    cur = db.execute('select distinct category from cases')
+    return sorted([capitalize(e['category']) for e in cur.fetchall()])
+
+@app.route('/interesting_cases', methods=['GET', 'POST'])
+def interesting_cases():
+
+    categories = list_categories()
+
+    if request.method == "POST":
+        category = request.form.get('category')
+    else:
+        category = categories[0]
+
+    return render_template('list_of_cases.html', category=category, categories=categories, entries=query_category(category.lower()))
+
 @app.route('/', methods=['GET',])
 def index():
     default_date = (datetime.datetime.now()-datetime.timedelta(days=7)).strftime('%Y-%m-%d')
@@ -323,7 +352,7 @@ def worldview_image(resource, date):
 
         return None
 
-@app.route('/interesting_cases')
+@app.route('/interesting_cases_old')
 def cases():
     # table = pd.read_csv('https://docs.google.com/spreadsheets/d/' +
     #                 '1j-yL-SXwPXMxEzhrx7plkggPYJ6WlHD3EM7gVte7Ba8/' +
