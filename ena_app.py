@@ -254,7 +254,7 @@ def _submit_case():
                    'Email': email,
                    'Name': name}
 
-        # stsu = write_case_to_sheetsu(payload)
+        stsu = write_case_to_sheetsu(payload)
         sql = write_case_to_sqlite(case_date, case_description, categories, name, email)
 
         return sql
