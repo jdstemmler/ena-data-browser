@@ -225,10 +225,10 @@ def _submit_case():
                    'Email': email,
                    'Name': name}
 
-        stsu = write_case_to_sheetsu(payload)
+        # stsu = write_case_to_sheetsu(payload)
         sql = write_case_to_sqlite(case_date, case_description, categories, name, email)
 
-        return stsu
+        return sql
 
     else:
         return "ERROR - It appears that you are a robot"
@@ -246,12 +246,17 @@ def write_case_to_sheetsu(payload, headers={"Content-Type": "application/json"})
         return "ERROR: {}\nStatus Code: {}".format(req.content, req.status_code)
 
 def write_case_to_sqlite(case_date, case_description, categories, name, email):
+
     db = get_db()
-    query = 'insert into cases (date_submitted, case_date, description, categories, name, email) values (?, ?, ?, ?, ?, ?)'
-    values = [datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-              case_date, case_description, ', '.join(categories), name, email]
-    db.execute(query, values)
-    db.commit()
+    query = 'insert into cases (date_submitted, case_date, description, category, name, email) values (?, ?, ?, ?, ?, ?)'
+
+    for category in categories:
+        values = [datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                  case_date, case_description, category.lower(), str(name).lower(), str(email).lower()]
+
+        db.execute(query, values)
+        db.commit()
+
     flash("Interesting Case was submitted successfully!")
 
     return render_template('submit_success.html',

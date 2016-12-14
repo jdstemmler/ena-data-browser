@@ -25,13 +25,15 @@ def write_rows():
     db = connect_db()
     table = cases()
 
-    query = 'insert into cases (date_submitted, case_date, description, categories, name, email) values (?, ?, ?, ?, ?, ?)'
+    query = 'insert into cases (date_submitted, case_date, description, category, name, email) values (?, ?, ?, ?, ?, ?)'
 
     for row in table.itertuples(name="InterestingCase"):
-        values = [row.tstamp.strftime('%Y-%m-%d %H:%M:%S'), row.case_dt.strftime('%Y-%m-%d'),
-                  row.description, row.category, row.name, row.email]
-        db.execute(query, values)
-        db.commit()
+        for category in row.category.split(', '):
+            values = [row.tstamp.strftime('%Y-%m-%d %H:%M:%S'), row.case_dt.strftime('%Y-%m-%d'),
+                      row.description, category.lower(), str(row.name).lower(), str(row.email).lower()]
+            db.execute(query, values)
+            db.commit()
+
         print("Inserted Row")
 
 if __name__ == "__main__":

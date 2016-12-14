@@ -4,7 +4,7 @@ create table cases (
   date_submitted text not null,
   case_date text not null,
   description text not null,
-  categories text,
+  category text,
   name text,
   email text
 );
