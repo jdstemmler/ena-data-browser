@@ -67,7 +67,7 @@ def query_category(category):
     query = "select case_date, description from cases where category is ?"
     cur = db.execute(query, [category, ])
     entries = cur.fetchall()
-    return entries
+    return sorted(entries, key=lambda x: x['case_date'])
 
 def capitalize(s):
     """Capitalizes the first letter of each word in string 's'"""
@@ -244,8 +244,8 @@ def _submit_case():
         if (case_description is None) or (len(case_description) == 0):
             return redirect(url_for('submit_case', date=case_date, desc_class='has-error'))
 
-        if other_categories is not None:
-            categories.extend([s.strip() for s in other_categories.split(',')])
+        if (other_categories is not None) and (len(other_categories) > 0):
+            categories.extend([s.strip() for s in other_categories.split(', ')])
 
         payload = {'Timestamp': datetime.datetime.now().strftime('%m/%d/%Y %H:%M:%S'),
                    'Date': datetime.datetime.strptime(case_date, '%Y-%m-%d').strftime('%m/%d/%Y'),
