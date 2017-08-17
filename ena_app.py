@@ -212,7 +212,7 @@ def redirect_full(date):
 
 @app.route('/submit_case')
 def submit_case():
-    return render_template('case_submission.html', site_key=recaptcha['site-key'], d=request.args)
+    return render_template('case_submission.html', site_key=recaptcha['site-key'], d=request.args, c=list_categories())
 
 
 @app.route('/_submit_case', methods=['POST', 'GET'])
@@ -232,7 +232,7 @@ def _submit_case():
         categories = form.getlist('category', None)
         other_categories = form.get('other_tags', None)
         case_date = form.get('case_date', None)
-        case_description = form.get('case_description', None)
+        case_description = form.get('case_description', "")
         email = form.get('email', None)
         name = form.get('name', None)
 
@@ -242,7 +242,8 @@ def _submit_case():
             return redirect(url_for('submit_case', date_class='has-error'))
 
         if (case_description is None) or (len(case_description) == 0):
-            return redirect(url_for('submit_case', date=case_date, desc_class='has-error'))
+            # return redirect(url_for('submit_case', date=case_date, desc_class='has-error'))
+            pass
 
         if (other_categories is not None) and (len(other_categories) > 0):
             categories.extend([s.strip() for s in other_categories.split(', ')])
@@ -254,7 +255,7 @@ def _submit_case():
                    'Email': email,
                    'Name': name}
 
-        stsu = write_case_to_sheetsu(payload)
+        # stsu = write_case_to_sheetsu(payload)
         sql = write_case_to_sqlite(case_date, case_description, categories, name, email)
 
         return sql
